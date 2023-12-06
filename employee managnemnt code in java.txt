@@ -1,0 +1,125 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+
+class Employee {
+    private int id;
+    private String name;
+    private double salary;
+
+    public Employee(int id, String name, double salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee [id=" + id + ", name=" + name + ", salary=" + salary + "]";
+    }
+}
+
+class EmployeeManagementSystem {
+    private ArrayList<Employee> employees;
+    private int nextId;
+
+    public EmployeeManagementSystem() {
+        employees = new ArrayList<>();
+        nextId = 1;
+    }
+
+    public void addEmployee(String name, double salary) {
+        Employee employee = new Employee(nextId++, name, salary);
+        employees.add(employee);
+        System.out.println("Employee added successfully: " + employee);
+    }
+
+    public void viewEmployees() {
+        System.out.println("Employee List:");
+        for (Employee employee : employees) {
+            System.out.println(employee);
+        }
+    }
+
+    public void updateEmployee(int id, String name, double salary) {
+        for (Employee employee : employees) {
+            if (employee.getId() == id) {
+                employee.name = name;
+                employee.salary = salary;
+                System.out.println("Employee updated successfully: " + employee);
+                return;
+            }
+        }
+        System.out.println("Employee with ID " + id + " not found.");
+    }
+
+    public void deleteEmployee(int id) {
+        Iterator<Employee> iterator = employees.iterator();
+        while (iterator.hasNext()) {
+            Employee employee = iterator.next();
+            if (employee.getId() == id) {
+                iterator.remove();
+                System.out.println("Employee deleted successfully: " + employee);
+                return;
+            }
+        }
+        System.out.println("Employee with ID " + id + " not found.");
+    }
+}
+
+public class EmployeeManagementApplication {
+    public static void main(String[] args) {
+        EmployeeManagementSystem ems = new EmployeeManagementSystem();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n1. Add Employee\n2. View Employees\n3. Update Employee\n4. Delete Employee\n5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter employee name: ");
+                    String name = scanner.next();
+                    System.out.print("Enter employee salary: ");
+                    double salary = scanner.nextDouble();
+                    ems.addEmployee(name, salary);
+                    break;
+                case 2:
+                    ems.viewEmployees();
+                    break;
+                case 3:
+                    System.out.print("Enter employee ID to update: ");
+                    int updateId = scanner.nextInt();
+                    System.out.print("Enter new name: ");
+                    String updateName = scanner.next();
+                    System.out.print("Enter new salary: ");
+                    double updateSalary = scanner.nextDouble();
+                    ems.updateEmployee(updateId, updateName, updateSalary);
+                    break;
+                case 4:
+                    System.out.print("Enter employee ID to delete: ");
+                    int deleteId = scanner.nextInt();
+                    ems.deleteEmployee(deleteId);
+                    break;
+                case 5:
+                    System.out.println("Exiting the Employee Management Application. Goodbye!");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+            }
+        }
+    }
+}
